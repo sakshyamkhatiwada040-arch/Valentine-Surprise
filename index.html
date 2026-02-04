@@ -6,21 +6,15 @@
 <title>Valentine Surprise</title>
 <style>
 :root{
-  --bg-gradient-start: #ffe4ec;
-  --bg-gradient-end: #ffc1d3;
-
-  --gift-front: #c5001a;
-  --gift-top: #d1272a;
-  --ribbon: #90ee90;
-  --ribbon-dark: #7fdc7f;
-
-  --bow: #90ee90;
-  --bow-dark: #7fdc7f;
-
+  --bg-start: #ffe4ec;
+  --bg-end: #ffc1d3;
+  --gift1-color: #c5001a;
+  --gift2-color: #ff4f7b;
+  --ribbon-color: #90ee90;
   --text-color: #5c1f3a;
 }
 
-/* Body and background */
+/* Body */
 html, body{
   margin:0;
   padding:0;
@@ -30,15 +24,10 @@ html, body{
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow-x:hidden;
-  background: linear-gradient(135deg,var(--bg-gradient-start),var(--bg-gradient-end));
-  background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'>\
-<path d='M50 80 C25 60 5 40 20 25 C32 12 50 20 50 32 C50 20 68 12 80 25 C95 40 75 60 50 80 Z' fill='rgba(255,0,80,0.05)' transform='rotate(-10 50 50)'/></svg>");
-  background-repeat: repeat;
-  background-size:100px 100px;
+  background: linear-gradient(135deg,var(--bg-start),var(--bg-end));
 }
 
+/* Wrapper */
 #valentineWrapper{
   width:100%;
   height:100%;
@@ -46,28 +35,30 @@ html, body{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  position:relative;
   text-align:center;
+}
+
+/* Glow & Pulse */
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 15px rgba(255,0,80,0.4); }
+  50%{ box-shadow: 0 0 35px rgba(255,0,80,0.7); }
+  100%{ box-shadow: 0 0 15px rgba(255,0,80,0.4); }
 }
 
 /* Gift box */
 .gift-box{
   position:relative;
-  width:60vw;
-  max-width:260px;
-  height:60vw;
-  max-height:260px;
+  width:180px;
+  height:180px;
   border-radius:12px;
-  background: linear-gradient(135deg,var(--gift-front),var(--gift-top));
-  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  background: linear-gradient(135deg,var(--gift1-color),var(--gift2-color));
+  animation: pulseGlow 1.4s infinite;
   cursor:pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
   margin:auto;
+  transition: transform 0.3s ease;
 }
 .gift-box:hover{
-  transform: translateY(-12px) scale(1.07);
-  box-shadow:0 25px 40px rgba(0,0,0,0.35);
-  filter: drop-shadow(0 0 20px #ff4f7b);
+  transform: translateY(-8px) scale(1.05);
 }
 
 /* Ribbon */
@@ -77,7 +68,7 @@ html, body{
   height:100%;
   left:40%;
   top:0;
-  background: linear-gradient(135deg,var(--ribbon),var(--ribbon-dark));
+  background: linear-gradient(135deg,var(--ribbon-color),#7fdc7f);
   border-radius:5px;
 }
 .ribbon-horizontal{
@@ -86,95 +77,85 @@ html, body{
   height:20%;
   top:40%;
   left:0;
-  background: linear-gradient(135deg,var(--ribbon),var(--ribbon-dark));
+  background: linear-gradient(135deg,var(--ribbon-color),#7fdc7f);
   border-radius:5px;
 }
-
-/* Bow */
 .bow{
   position:absolute;
-  top:-16px;
+  top:-14px;
   left:50%;
   transform:translateX(-50%);
-  width:50px;
-  height:30px;
+  width:40px;
+  height:24px;
 }
 .bow::before,
 .bow::after{
   content:"";
   position:absolute;
-  width:25px;
-  height:30px;
+  width:20px;
+  height:24px;
   border-radius:6px;
-  background: linear-gradient(135deg,var(--bow),var(--bow-dark));
+  background: linear-gradient(135deg,var(--ribbon-color),#7fdc7f);
 }
-.bow::before{ transform: rotate(-30deg); left:-12px; }
-.bow::after{ transform: rotate(30deg); right:-12px; }
+.bow::before{ transform: rotate(-30deg); left:-10px; }
+.bow::after{ transform: rotate(30deg); right:-10px; }
 
 /* Gift text */
 .gift-text{
-  margin-top:18px;
-  font-size:5vw;
+  margin-top:14px;
+  font-size:18px;
   color: var(--text-color);
-  text-align:center;
 }
 
 /* Letter */
 .paper{
   width:90%;
-  max-width:400px;
+  max-width:380px;
   background:#fffdf7;
-  padding:5vw;
+  padding:18px;
   border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.18);
-  font-size:4vw;
-  line-height:1.65;
+  box-shadow:0 8px 25px rgba(0,0,0,0.2);
+  font-size:16px;
+  line-height:1.6;
   color: var(--text-color);
-  text-align:left;
   margin-top:20px;
+  text-align:left;
 }
 
 /* Buttons */
 .buttons{
-  margin-top:25px;
+  margin-top:20px;
   position:relative;
 }
 button{
-  padding:3vw 6vw;
-  font-size:4vw;
+  padding:10px 22px;
+  font-size:16px;
   border:none;
-  border-radius:12px;
+  border-radius:10px;
   cursor:pointer;
-  margin:10px;
+  margin:8px;
   font-weight:bold;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
-
-/* Stylish Yes button */
 .yes{
   background: linear-gradient(135deg,#ff7aa2,#ff4f7b);
   color:white;
 }
 .yes:hover{
   transform: scale(1.1);
-  box-shadow:0 8px 20px rgba(255,0,80,0.4);
 }
-
-/* No button */
 .no-run{
   position:absolute;
   background: linear-gradient(135deg,#7fff7f,#32cd32);
   color:white;
-  transition: left 0.5s ease, top 0.5s ease;
+  transition: left 0.4s ease, top 0.4s ease;
 }
-
-.hidden{ display:none; }
+.hidden{ display:none;}
 
 @media (max-width:500px){
-  .gift-box{ width:70vw; height:70vw; }
-  .paper{ font-size:5vw; padding:6vw; }
-  button{ font-size:5vw; padding:4vw 8vw; }
+  .gift-box{ width:50vw; height:50vw; }
+  .paper{ font-size:4vw; padding:4vw; }
+  button{ font-size:4vw; padding:3vw 6vw; }
 }
 </style>
 </head>
@@ -206,48 +187,63 @@ button{
   <div id="letter" class="center hidden">
     <div class="paper">
       <p>Meri pyaari <b>Rachna</b>,<br><br>
-      You make my days softer,<br>
+      You make my days brighter,<br>
       my heart calmer,<br>
       and my world better just by being in it.<br><br>
       Will you be my Valentine…<br>
       <b>pleaseeeee</b> 🥺❤️</p>
       <div class="buttons">
-        <button id="noBtn" class="no-run">No</button>
-        <button class="yes" onclick="finalYes()">Yes</button>
+        <button class="yes" style="float:left;" onclick="finalYes()">Yes</button>
+        <button id="noBtn" class="no-run" style="right:0;">No</button>
       </div>
     </div>
   </div>
 
 </div>
 
+<!-- Valentine gift opening sound -->
+<audio id="giftSound" preload="auto">
+  <source src="https://www.soundjay.com/misc/sounds/glass-tinkling-1.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+// Play gift sound on user click
+function playGiftSound(){
+    const sound = document.getElementById("giftSound");
+    sound.currentTime = 0;
+    sound.play().catch(e => console.log("Sound blocked:", e));
+}
+
+// Open gift steps
 function openGift1(){
+  playGiftSound();
   document.getElementById("step1").classList.add("hidden");
   document.getElementById("step2").classList.remove("hidden");
 }
-
 function openGift2(){
+  playGiftSound();
   document.getElementById("step2").classList.add("hidden");
   document.getElementById("letter").classList.remove("hidden");
 }
 
-// No button glides but avoids cursor
+// No button movement
 const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener("mousemove", e=>{
-  const margin = 120;
-  let newX, newY;
+noBtn.addEventListener("mousemove", e => {
+  const safe = 120;
+  let nx, ny;
   const w = window.innerWidth - noBtn.offsetWidth - 20;
   const h = window.innerHeight - noBtn.offsetHeight - 20;
 
-  do{
-    newX = Math.random()*w;
-    newY = Math.random()*h;
-  }while(Math.abs(newX - e.clientX)<margin && Math.abs(newY - e.clientY)<margin);
+  do {
+    nx = Math.random()*w;
+    ny = Math.random()*h;
+  } while(Math.abs(nx - e.clientX)<safe && Math.abs(ny - e.clientY)<safe);
 
-  noBtn.style.left = newX + "px";
-  noBtn.style.top = newY + "px";
+  noBtn.style.left = nx + "px";
+  noBtn.style.top = ny + "px";
 });
 
+// Yes button final action
 function finalYes(){
   alert("YAY ❤️ Valentine locked 😌");
 }
