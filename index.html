@@ -30,7 +30,7 @@ html, body{
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:hidden;
+  overflow-x:hidden;
   background: linear-gradient(135deg,var(--bg-gradient-start),var(--bg-gradient-end));
   background-image: url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'>\
@@ -47,13 +47,16 @@ html, body{
   justify-content:center;
   align-items:center;
   position:relative;
+  text-align:center;
 }
 
 /* Gift box */
 .gift-box{
   position:relative;
-  width:260px;
-  height:260px;
+  width:60vw;
+  max-width:260px;
+  height:60vw;
+  max-height:260px;
   border-radius:12px;
   background: linear-gradient(135deg,var(--gift-front),var(--gift-top));
   box-shadow: 0 12px 30px rgba(0,0,0,0.25);
@@ -111,7 +114,7 @@ html, body{
 /* Gift text */
 .gift-text{
   margin-top:18px;
-  font-size:20px;
+  font-size:5vw;
   color: var(--text-color);
   text-align:center;
 }
@@ -121,10 +124,10 @@ html, body{
   width:90%;
   max-width:400px;
   background:#fffdf7;
-  padding:28px;
+  padding:5vw;
   border-radius:12px;
   box-shadow:0 10px 30px rgba(0,0,0,0.18);
-  font-size:18px;
+  font-size:4vw;
   line-height:1.65;
   color: var(--text-color);
   text-align:left;
@@ -137,8 +140,8 @@ html, body{
   position:relative;
 }
 button{
-  padding:12px 28px;
-  font-size:18px;
+  padding:3vw 6vw;
+  font-size:4vw;
   border:none;
   border-radius:12px;
   cursor:pointer;
@@ -167,7 +170,12 @@ button{
 }
 
 .hidden{ display:none; }
-.center{text-align:center;}
+
+@media (max-width:500px){
+  .gift-box{ width:70vw; height:70vw; }
+  .paper{ font-size:5vw; padding:6vw; }
+  button{ font-size:5vw; padding:4vw 8vw; }
+}
 </style>
 </head>
 <body>
@@ -226,7 +234,7 @@ function openGift2(){
 // No button glides but avoids cursor
 const noBtn = document.getElementById("noBtn");
 noBtn.addEventListener("mousemove", e=>{
-  const margin = 120; // safe distance from cursor
+  const margin = 120;
   let newX, newY;
   const w = window.innerWidth - noBtn.offsetWidth - 20;
   const h = window.innerHeight - noBtn.offsetHeight - 20;
