@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For You ❤️</title>
+<title>Valentine Surprise ❤️</title>
 
 <style>
 :root{
@@ -27,12 +27,7 @@ html,body{
   overflow:hidden;
 }
 
-/* wrapper */
-#app{
-  text-align:center;
-  width:100%;
-  padding:20px;
-}
+#app{text-align:center;width:100%;padding:20px;position:relative;z-index:1}
 
 /* heartbeat glow */
 @keyframes heartBeat{
@@ -69,11 +64,14 @@ html,body{
   padding:22px;
   border-radius:16px;
   box-shadow:0 10px 25px rgba(0,0,0,.2);
-  max-width:420px;
+  max-width:90%;
   margin:auto;
   font-size:16px;
   line-height:1.6;
   color:#4a1f2e;
+  text-align:left;
+  position:relative;
+  z-index:2;
 }
 
 /* buttons */
@@ -88,6 +86,8 @@ button{
   border:none;
   border-radius:14px;
   font-weight:700;
+  z-index:2;
+  position:relative;
 }
 
 .yes{
@@ -106,46 +106,75 @@ button{
 
 /* final yes */
 #final{
-  font-size:32px;
+  font-size:40px;
   color:var(--red);
-  text-shadow:0 0 16px rgba(183,20,20,.6);
-  animation:heartBeat 1.2s infinite;
+  text-shadow:0 0 20px rgba(183,20,20,.7),0 0 30px rgba(255,100,100,.5);
+  animation:heartBeatFinal 1.4s infinite alternate;
+  margin-top:20px;
+  z-index:10;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
 }
 
-/* sparkle hearts */
-.heart{
+/* heartbeat + gentle bounce */
+@keyframes heartBeatFinal{
+  0%   {transform:translate(-50%,-50%) scale(1);}
+  25%  {transform:translate(-50%,-48%) scale(1.05);}
+  50%  {transform:translate(-50%,-50%) scale(1.1);}
+  75%  {transform:translate(-50%,-52%) scale(1.05);}
+  100% {transform:translate(-50%,-50%) scale(1);}
+}
+
+/* floating hearts, stars, sparkles */
+.heart, .confetti, .star{
   position:fixed;
   font-size:20px;
-  animation:float 4s linear forwards;
+  pointer-events:none;
+  z-index:9;
 }
+.confetti{font-size:14px}
+.star{font-size:18px;color:#f5f5a1;}
 
-@keyframes float{
-  from{transform:translateY(0);opacity:1}
-  to{transform:translateY(-100vh);opacity:0}
+/* background floating rainbow hearts */
+.bg-heart{
+  position:fixed;
+  font-size:16px;
+  opacity:0.2;
+  pointer-events:none;
+  z-index:0;
 }
 
 .hidden{display:none}
+
+@media(min-width:600px){
+  .glow-text{font-size:26px}
+  .paper{font-size:18px}
+  button{font-size:18px;padding:12px 20px}
+}
 </style>
 </head>
 
 <body>
 <div id="app">
 
-  <!-- STEP 1 -->
+  <!-- STEP 1: Gift -->
   <div id="step1">
-    <img src="gift.png" class="click-img" onclick="open1()">
+    <img src="gift.png" class="click-img" onclick="open1(this)">
     <div class="glow-text">For You ❤️</div>
   </div>
 
-  <!-- STEP 2 -->
+  <!-- STEP 2: Rose -->
   <div id="step2" class="hidden">
-    <img src="redrose.png" class="click-img">
+    <img src="redrose.png" class="click-img" id="roseImg">
     <div id="count">6</div>
   </div>
 
-  <!-- STEP 3 -->
+  <!-- STEP 3: Gift again -->
   <div id="step3" class="hidden">
-    <img src="gift.png" class="click-img" onclick="openLetter()">
+    <img src="gift.png" class="click-img" onclick="openLetter(this)">
     <div class="glow-text">A Surprise for you ❤️</div>
   </div>
 
@@ -154,12 +183,14 @@ button{
     <div class="paper">
       <p>
         <b>Pyaari Rachna</b>,<br><br>
-        You make my life softer, calmer, and brighter just by being you.<br><br>
+        You make my life softer, calmer, and brighter just by being you.<br>
+        Every smile you share lights up my day, every word you speak soothes my heart, 
+        and every moment with you feels magical.<br>
+        I appreciate every little thing you do, and I want you to know how special you are to me.<br><br>
         <b>Will you be my Valentine?</b>
       </p>
-
       <div class="buttons">
-        <button class="yes" onclick="yes()">Yes</button>
+        <button class="yes" onclick="yes(this)">Yes</button>
         <button id="no" class="no">No</button>
       </div>
     </div>
@@ -167,27 +198,64 @@ button{
 
   <!-- FINAL -->
   <div id="final" class="hidden">
-    Yay! She said YES ❤️🫡
+    Yay! She said YES ❤️✨🫡
   </div>
 
 </div>
 
-<audio id="music" src="music.mp3"></audio>
+<!-- MUSIC -->
+<audio id="music" src="music.mp3" loop></audio>
 
 <script>
 const music=document.getElementById("music");
 let started=false;
 
+function fadeInAudio(audio, target=0.8, duration=2000){
+  audio.volume=0;
+  audio.play();
+  let start=Date.now();
+  const fade=setInterval(()=>{
+    let elapsed=Date.now()-start;
+    audio.volume=Math.min(target, (elapsed/duration)*target);
+    if(elapsed>=duration) clearInterval(fade);
+  },50);
+}
+
+// SPARKLE GENERATOR
+function sparkle(target,count=12){
+  const rect=target.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+  for(let i=0;i<count;i++){
+    const s=document.createElement("div");
+    const type=Math.random()<0.5?"confetti":"star";
+    s.className=type;
+    s.textContent=type==="confetti"?"✨":"⭐";
+    s.style.left=cx+"px";
+    s.style.top=cy+"px";
+    const x=(Math.random()-0.5)*300+"px";
+    const y=(Math.random()-0.5)*300+"px";
+    const r=(Math.random()*360)+"deg";
+    s.style.setProperty('--x',x);
+    s.style.setProperty('--y',y);
+    s.style.setProperty('--r',r);
+    s.style.animation='floatUp 3s linear forwards';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),3000);
+  }
+}
+
+// Step 1
 function startMusic(){
   if(!started){
-    music.volume=0.8;
-    music.play();
+    fadeInAudio(music,0.8,2000);
     started=true;
   }
 }
 
-function open1(){
+function open1(el){
   startMusic();
+  sparkle(el);
   step1.classList.add("hidden");
   step2.classList.remove("hidden");
 
@@ -197,41 +265,162 @@ function open1(){
     t--; c.textContent=t;
     if(t===0){
       clearInterval(timer);
+      sparkle(document.getElementById("roseImg"),20);
       step2.classList.add("hidden");
       step3.classList.remove("hidden");
     }
   },1000);
 }
 
-function openLetter(){
+// Step 3
+function openLetter(el){
+  sparkle(el,20);
   step3.classList.add("hidden");
   letter.classList.remove("hidden");
 }
 
-/* NO button run */
+// NO button moves
 const no=document.getElementById("no");
 setInterval(()=>{
-  const x=Math.random()*(window.innerWidth-120);
-  const y=Math.random()*(window.innerHeight-60);
+  const padding=20;
+  const maxX=window.innerWidth-no.offsetWidth-padding;
+  const maxY=window.innerHeight-no.offsetHeight-padding;
+  const x=Math.random()*maxX;
+  const y=Math.random()*maxY;
   no.style.left=x+"px";
   no.style.top=y+"px";
 },800);
 
-/* YES */
-function yes(){
+// YES button
+function yes(btn){
   letter.classList.add("hidden");
   final.classList.remove("hidden");
 
-  setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
-    h.textContent="❤️";
-    h.style.left=Math.random()*100+"vw";
-    h.style.bottom="0";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),4000);
-  },250);
+  // YES sparkles
+  function yesSparkle(){
+    for(let i=0;i<12;i++){
+      const s=document.createElement("div");
+      s.className="confetti";
+      s.textContent="✨";
+      const rect=btn.getBoundingClientRect();
+      s.style.left=(rect.left + rect.width/2 + (Math.random()-0.5)*100)+"px";
+      s.style.top=(rect.top + rect.height/2 + (Math.random()-0.5)*50)+"px";
+      s.style.fontSize=(Math.random()*16+8)+"px";
+      s.style.opacity=0.8;
+      document.body.appendChild(s);
+      const dx=(Math.random()-0.5)*200;
+      const dy=(Math.random()-0.5)*200;
+      const rot=Math.random()*360;
+      s.animate([
+        {transform:`translate(0,0) rotate(0deg)`,opacity:0.8},
+        {transform:`translate(${dx}px,${dy}px) rotate(${rot}deg)`,opacity:0}
+      ], {duration:1200, easing:"ease-out"});
+      setTimeout(()=>s.remove(),1500);
+    }
+  }
+  yesSparkle();
+  setInterval(yesSparkle,1400);
+
+  // music fade
+  const fadeTarget=0.3;
+  const fadeDuration=3000;
+  let start=Date.now();
+  const fade=setInterval(()=>{
+    let elapsed=Date.now()-start;
+    music.volume=Math.max(fadeTarget, 0.8 - 0.5*(elapsed/fadeDuration));
+    if(elapsed>=fadeDuration) clearInterval(fade);
+  },50);
+
+  // FINAL CELEBRATION: SLOW CONFETTI + HEARTS
+  function finalConfetti(){
+    for(let i=0;i<10;i++){
+      const c=document.createElement("div");
+      c.className="confetti";
+      c.textContent="🎉";
+      c.style.left=(Math.random()*window.innerWidth)+"px";
+      c.style.top="-20px";
+      c.style.fontSize=(Math.random()*18+14)+"px";
+      c.style.opacity=0.6 + Math.random()*0.3;
+      document.body.appendChild(c);
+      const endY=window.innerHeight + 50;
+      c.animate([
+        {transform:`translateY(0)`, opacity:c.style.opacity},
+        {transform:`translateY(${endY}px) rotate(${Math.random()*360}deg)`, opacity:0}
+      ], {duration:7000 + Math.random()*3000, easing:"linear"});
+      setTimeout(()=>c.remove(),10000);
+    }
+
+    for(let i=0;i<5;i++){
+      const h=document.createElement("div");
+      h.className="heart";
+      h.textContent="❤️";
+      h.style.left=(Math.random()*window.innerWidth)+"px";
+      h.style.top="-20px";
+      h.style.fontSize=(Math.random()*24+12)+"px";
+      h.style.opacity=0.5 + Math.random()*0.3;
+      document.body.appendChild(h);
+      const endY=window.innerHeight + 50;
+      h.animate([
+        {transform:`translateY(0)`, opacity:h.style.opacity},
+        {transform:`translateY(${endY}px) rotate(${Math.random()*360}deg)`, opacity:0}
+      ], {duration:9000 + Math.random()*3000, easing:"linear"});
+      setTimeout(()=>h.remove(),12000);
+    }
+  }
+
+  finalConfetti();
+  setInterval(finalConfetti,1500);
 }
+
+// BACKGROUND FLOATING HEARTS
+function floatingHearts(){
+  setInterval(()=>{
+    const heart=document.createElement("div");
+    heart.className="bg-heart";
+    heart.textContent="❤️";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.bottom="-20px";
+    const size=Math.random()*16+8;
+    heart.style.fontSize=size+"px";
+    heart.style.opacity=0.15 + Math.random()*0.15;
+    document.body.appendChild(heart);
+
+    const driftX=(Math.random()-0.5)*50;
+    const duration=8000 + Math.random()*4000;
+    heart.animate([
+      {transform:`translate(0,0)`, opacity:heart.style.opacity},
+      {transform:`translate(${driftX}px,-120vh)`, opacity:0}
+    ],{duration:duration, easing:"linear"});
+
+    setTimeout(()=>heart.remove(), duration);
+  },700);
+}
+floatingHearts();
+
+// CURSOR PARTICLE TRAIL
+document.addEventListener("mousemove", e=>{
+  const p=document.createElement("div");
+  p.textContent="✨";
+  p.style.position="fixed";
+  p.style.left=e.clientX+"px";
+  p.style.top=e.clientY+"px";
+  p.style.fontSize=(Math.random()*12+8)+"px";
+  p.style.opacity=1;
+  p.style.pointerEvents="none";
+  p.style.zIndex=15;
+  document.body.appendChild(p);
+
+  let dx=(Math.random()-0.5)*40;
+  let dy=(Math.random()-0.5)*40;
+  let angle=Math.random()*360;
+
+  p.animate([
+    {transform:`translate(0,0) rotate(0deg)`,opacity:1},
+    {transform:`translate(${dx}px,${dy}px) rotate(${angle}deg)`,opacity:0}
+  ],{duration:800, easing:"ease-out"});
+
+  setTimeout(()=>p.remove(),800);
+});
 </script>
 </body>
 </html>
