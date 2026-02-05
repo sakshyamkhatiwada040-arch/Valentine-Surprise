@@ -3,251 +3,235 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Surprise</title>
+<title>For You ❤️</title>
+
 <style>
 :root{
-  --bg-start: #ffe4ec;
-  --bg-end: #ffc1d3;
-  --gift1-color: #c5001a;
-  --gift2-color: #ff4f7b;
-  --ribbon-color: #90ee90;
-  --text-color: #5c1f3a;
+  --red:#b71414;
+  --pink:#ff6b8a;
+  --bg1:#ffe4ec;
+  --bg2:#ffc1d3;
 }
 
-/* Body */
-html, body{
+*{box-sizing:border-box}
+
+html,body{
   margin:0;
-  padding:0;
   width:100%;
   height:100%;
-  font-family:'Poppins', sans-serif;
+  font-family:Poppins,system-ui;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
   display:flex;
   justify-content:center;
   align-items:center;
-  background: linear-gradient(135deg,var(--bg-start),var(--bg-end));
+  overflow:hidden;
 }
 
-/* Wrapper */
-#valentineWrapper{
-  width:100%;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+/* wrapper */
+#app{
   text-align:center;
-}
-
-/* Glow & Pulse */
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 15px rgba(255,0,80,0.4); }
-  50%{ box-shadow: 0 0 35px rgba(255,0,80,0.7); }
-  100%{ box-shadow: 0 0 15px rgba(255,0,80,0.4); }
-}
-
-/* Gift box */
-.gift-box{
-  position:relative;
-  width:180px;
-  height:180px;
-  border-radius:12px;
-  background: linear-gradient(135deg,var(--gift1-color),var(--gift2-color));
-  animation: pulseGlow 1.4s infinite;
-  cursor:pointer;
-  margin:auto;
-  transition: transform 0.3s ease;
-}
-.gift-box:hover{
-  transform: translateY(-8px) scale(1.05);
-}
-
-/* Ribbon */
-.ribbon-vertical{
-  position:absolute;
-  width:20%;
-  height:100%;
-  left:40%;
-  top:0;
-  background: linear-gradient(135deg,var(--ribbon-color),#7fdc7f);
-  border-radius:5px;
-}
-.ribbon-horizontal{
-  position:absolute;
   width:100%;
-  height:20%;
-  top:40%;
-  left:0;
-  background: linear-gradient(135deg,var(--ribbon-color),#7fdc7f);
-  border-radius:5px;
+  padding:20px;
 }
-.bow{
-  position:absolute;
-  top:-14px;
-  left:50%;
-  transform:translateX(-50%);
-  width:40px;
-  height:24px;
-}
-.bow::before,
-.bow::after{
-  content:"";
-  position:absolute;
-  width:20px;
-  height:24px;
-  border-radius:6px;
-  background: linear-gradient(135deg,var(--ribbon-color),#7fdc7f);
-}
-.bow::before{ transform: rotate(-30deg); left:-10px; }
-.bow::after{ transform: rotate(30deg); right:-10px; }
 
-/* Gift text */
-.gift-text{
+/* heartbeat glow */
+@keyframes heartBeat{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 0 10px rgba(183,20,20,.5))}
+  50%{transform:scale(1.06);filter:drop-shadow(0 0 18px rgba(183,20,20,.7))}
+}
+
+/* gift / rose image */
+.click-img{
+  width:60vw;
+  max-width:220px;
+  animation:heartBeat 1.4s infinite;
+  cursor:pointer;
+}
+
+/* glowing text */
+.glow-text{
   margin-top:14px;
-  font-size:18px;
-  color: var(--text-color);
+  font-size:20px;
+  color:var(--red);
+  text-shadow:0 0 8px rgba(183,20,20,.45);
 }
 
-/* Letter */
+/* countdown */
+#count{
+  margin-top:10px;
+  font-size:18px;
+  color:#5c1f3a;
+}
+
+/* letter */
 .paper{
-  width:90%;
-  max-width:380px;
   background:#fffdf7;
-  padding:18px;
-  border-radius:12px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.2);
+  padding:22px;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+  max-width:420px;
+  margin:auto;
   font-size:16px;
   line-height:1.6;
-  color: var(--text-color);
-  margin-top:20px;
-  text-align:left;
+  color:#4a1f2e;
 }
 
-/* Buttons */
+/* buttons */
 .buttons{
-  margin-top:20px;
+  margin-top:22px;
   position:relative;
 }
-button{
-  padding:10px 22px;
-  font-size:16px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  margin:8px;
-  font-weight:bold;
-  transition: all 0.3s ease;
-}
-.yes{
-  background: linear-gradient(135deg,#ff7aa2,#ff4f7b);
-  color:white;
-}
-.yes:hover{
-  transform: scale(1.1);
-}
-.no-run{
-  position:absolute;
-  background: linear-gradient(135deg,#7fff7f,#32cd32);
-  color:white;
-  transition: left 0.4s ease, top 0.4s ease;
-}
-.hidden{ display:none;}
 
-@media (max-width:500px){
-  .gift-box{ width:50vw; height:50vw; }
-  .paper{ font-size:4vw; padding:4vw; }
-  button{ font-size:4vw; padding:3vw 6vw; }
+button{
+  font-size:20px;
+  padding:14px 26px;
+  border:none;
+  border-radius:14px;
+  font-weight:700;
 }
+
+.yes{
+  background:linear-gradient(135deg,#ff7aa2,#ff4f7b);
+  color:white;
+}
+
+.no{
+  position:absolute;
+  background:#4cd964;
+  color:white;
+  left:50%;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+
+/* final yes */
+#final{
+  font-size:32px;
+  color:var(--red);
+  text-shadow:0 0 16px rgba(183,20,20,.6);
+  animation:heartBeat 1.2s infinite;
+}
+
+/* sparkle hearts */
+.heart{
+  position:fixed;
+  font-size:20px;
+  animation:float 4s linear forwards;
+}
+
+@keyframes float{
+  from{transform:translateY(0);opacity:1}
+  to{transform:translateY(-100vh);opacity:0}
+}
+
+.hidden{display:none}
 </style>
 </head>
+
 <body>
+<div id="app">
 
-<div id="valentineWrapper">
-
-  <!-- Step 1 -->
-  <div id="step1" class="center">
-    <div class="gift-box" onclick="openGift1()">
-      <div class="ribbon-vertical"></div>
-      <div class="ribbon-horizontal"></div>
-      <div class="bow"></div>
-    </div>
-    <div class="gift-text">This is for you</div>
+  <!-- STEP 1 -->
+  <div id="step1">
+    <img src="gift.png" class="click-img" onclick="open1()">
+    <div class="glow-text">For You ❤️</div>
   </div>
 
-  <!-- Step 2 -->
-  <div id="step2" class="center hidden">
-    <div class="gift-box" onclick="openGift2()">
-      <div class="ribbon-vertical"></div>
-      <div class="ribbon-horizontal"></div>
-      <div class="bow"></div>
-    </div>
-    <div class="gift-text">Very Special</div>
+  <!-- STEP 2 -->
+  <div id="step2" class="hidden">
+    <img src="redrose.png" class="click-img">
+    <div id="count">6</div>
   </div>
 
-  <!-- Letter -->
-  <div id="letter" class="center hidden">
+  <!-- STEP 3 -->
+  <div id="step3" class="hidden">
+    <img src="gift.png" class="click-img" onclick="openLetter()">
+    <div class="glow-text">A Surprise for you ❤️</div>
+  </div>
+
+  <!-- LETTER -->
+  <div id="letter" class="hidden">
     <div class="paper">
-      <p>Meri pyaari <b>Rachna</b>,<br><br>
-      You make my days brighter,<br>
-      my heart calmer,<br>
-      and my world better just by being in it.<br><br>
-      Will you be my Valentine…<br>
-      <b>pleaseeeee</b> 🥺❤️</p>
+      <p>
+        <b>Pyaari Rachna</b>,<br><br>
+        You make my life softer, calmer, and brighter just by being you.<br><br>
+        <b>Will you be my Valentine?</b>
+      </p>
+
       <div class="buttons">
-        <button class="yes" style="float:left;" onclick="finalYes()">Yes</button>
-        <button id="noBtn" class="no-run" style="right:0;">No</button>
+        <button class="yes" onclick="yes()">Yes</button>
+        <button id="no" class="no">No</button>
       </div>
     </div>
   </div>
 
+  <!-- FINAL -->
+  <div id="final" class="hidden">
+    Yay! She said YES ❤️🫡
+  </div>
+
 </div>
 
-<!-- Valentine gift opening sound -->
-<audio id="giftSound" preload="auto">
-  <source src="https://www.soundjay.com/misc/sounds/glass-tinkling-1.mp3" type="audio/mpeg">
-</audio>
+<audio id="music" src="music.mp3"></audio>
 
 <script>
-// Play gift sound on user click
-function playGiftSound(){
-    const sound = document.getElementById("giftSound");
-    sound.currentTime = 0;
-    sound.play().catch(e => console.log("Sound blocked:", e));
+const music=document.getElementById("music");
+let started=false;
+
+function startMusic(){
+  if(!started){
+    music.volume=0.8;
+    music.play();
+    started=true;
+  }
 }
 
-// Open gift steps
-function openGift1(){
-  playGiftSound();
-  document.getElementById("step1").classList.add("hidden");
-  document.getElementById("step2").classList.remove("hidden");
+function open1(){
+  startMusic();
+  step1.classList.add("hidden");
+  step2.classList.remove("hidden");
+
+  let t=6;
+  const c=document.getElementById("count");
+  const timer=setInterval(()=>{
+    t--; c.textContent=t;
+    if(t===0){
+      clearInterval(timer);
+      step2.classList.add("hidden");
+      step3.classList.remove("hidden");
+    }
+  },1000);
 }
-function openGift2(){
-  playGiftSound();
-  document.getElementById("step2").classList.add("hidden");
-  document.getElementById("letter").classList.remove("hidden");
+
+function openLetter(){
+  step3.classList.add("hidden");
+  letter.classList.remove("hidden");
 }
 
-// No button movement
-const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener("mousemove", e => {
-  const safe = 120;
-  let nx, ny;
-  const w = window.innerWidth - noBtn.offsetWidth - 20;
-  const h = window.innerHeight - noBtn.offsetHeight - 20;
+/* NO button run */
+const no=document.getElementById("no");
+setInterval(()=>{
+  const x=Math.random()*(window.innerWidth-120);
+  const y=Math.random()*(window.innerHeight-60);
+  no.style.left=x+"px";
+  no.style.top=y+"px";
+},800);
 
-  do {
-    nx = Math.random()*w;
-    ny = Math.random()*h;
-  } while(Math.abs(nx - e.clientX)<safe && Math.abs(ny - e.clientY)<safe);
+/* YES */
+function yes(){
+  letter.classList.add("hidden");
+  final.classList.remove("hidden");
 
-  noBtn.style.left = nx + "px";
-  noBtn.style.top = ny + "px";
-});
-
-// Yes button final action
-function finalYes(){
-  alert("YAY ❤️ Valentine locked 😌");
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.bottom="0";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  },250);
 }
 </script>
-
 </body>
 </html>
